@@ -34,3 +34,60 @@ int main(void)
 
 	return (0);
 }
+int execute(char **command)
+{
+	pid_t is_kid;
+
+	is_kid = fork();
+
+	if (is_kid != 0)
+	{
+		wait(NULL);
+		return(0);
+	}
+	if (is_kid == 0)
+	{
+		if (execve(command[0], command, NULL) == -1)
+		{
+			perror("Error: ");
+			return (-1);
+		}
+	}
+
+	return (0);
+}
+
+char **make_av(char *str)
+{
+	char *buffer = strdup(str);
+	char *arguement;
+	char prev = 0;
+	int i = 0, numArgs = 0;
+
+	while (buffer[i])
+	{
+		if (buffer[i] == ' ' && prev != ' ')
+			numArgs++;
+		prev = buffer[i];
+		i++;
+	}
+
+	av = malloc(sizeof(*av) * (numArgs + 2));
+	
+	argument = strtok(buffer, " \n");
+	av[i] = arguement;
+	i++;
+}
+
+void print_arrary(char **array)
+{
+	int i = 0;
+
+	while (array[i] != NULL)
+	{
+		printf("$s\n", array[i]);
+		i++;
+	}
+	if (array[i] == NULL)
+		printf("NULL\n");
+}
