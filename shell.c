@@ -2,13 +2,15 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <stdio.h>
+#include "shell.h"
 
 char **av;
 char **make_av(char *);
-void print_array(char **av);
+void print_arrary(char **av);
 int execute(char **command);
 
-int main(void)
+int main(int ac, char **av)
 {
 	char *buffer = NULL;
 	char **command;
@@ -20,13 +22,14 @@ int main(void)
 
 		getline(&buffer, &bufsize, stdin);
 
-		if (strcmp(buffer, "exit\n") == 0)
+		if (strcmp(buffer, "exit") == 0)
 			break;
 		else
 		{
 			command = make_av(buffer);
-			if (execute(command == -1)
-					break;
+			execute(command);
+			if (execute(command) == -1)
+			break;
 		}
 	}
 	free(buffer);
@@ -47,9 +50,11 @@ int execute(char **command)
 	}
 	if (is_kid == 0)
 	{
+		execve(command[0], command, NULL);
 		if (execve(command[0], command, NULL) == -1)
 		{
 			perror("Error: ");
+			printf("%s", command[0]);
 			return (-1);
 		}
 	}
@@ -57,10 +62,11 @@ int execute(char **command)
 	return (0);
 }
 
+
 char **make_av(char *str)
 {
 	char *buffer = strdup(str);
-	char *arguement;
+	char *argument;
 	char prev = 0;
 	int i = 0, numArgs = 0;
 
@@ -71,12 +77,23 @@ char **make_av(char *str)
 		prev = buffer[i];
 		i++;
 	}
-
-	av = malloc(sizeof(*av) * (numArgs + 2));
 	
+	av = malloc(sizeof(*av) * (numArgs + 2));
+
 	argument = strtok(buffer, " \n");
-	av[i] = arguement;
-	i++;
+	av[0] = argument;
+
+	i = 1;
+	while (argument != NULL)
+	{
+		argument = strtok(NULL, " \n");
+		av[i] = argument;
+		i++;
+	}
+
+	av[i] = NULL;
+
+	return (av);
 }
 
 void print_arrary(char **array)
@@ -85,7 +102,7 @@ void print_arrary(char **array)
 
 	while (array[i] != NULL)
 	{
-		printf("$s\n", array[i]);
+		printf("%s\n", array[i]);
 		i++;
 	}
 	if (array[i] == NULL)
