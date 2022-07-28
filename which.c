@@ -2,7 +2,12 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-
+/**
+ * main - look for file in current PATH
+ * @ac: count
+ * @av: value
+ * Return: 0
+ */
 int main(int ac, char **av)
 {
 	unsigned int i;
@@ -14,7 +19,7 @@ int main(int ac, char **av)
 		printf("getenv failed\n");
 		return (-1);
 	}
-	
+
 	if (ac < 2)
 	{
 		printf("Usage: %s path_to_file ...\n", av[0]);
