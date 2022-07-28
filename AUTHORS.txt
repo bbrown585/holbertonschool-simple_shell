@@ -1,5 +1,0 @@
-# This file list all individuals having contributed content to the repository.
-
-
-Brandon Brown <brandon.brown@holbertonstudents.com>
-Cole Raines <cole.raines@holbertonstudents.com>
