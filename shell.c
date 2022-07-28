@@ -5,18 +5,23 @@
 #include <stdio.h>
 #include "shell.h"
 
-char **av;
 char **make_av(char *);
 void print_arrary(char **av);
 int execute(char **command);
-
+/**
+ * main - entry
+ * @av: value
+ * @ac: count
+ *
+ * Return: 0
+ */
 int main(int ac, char **av)
 {
 	char *buffer = NULL;
 	char **command;
 	size_t bufsize = 0;
 
-	while(1)
+	while (1)
 	{
 		printf("($) ");
 
@@ -24,7 +29,6 @@ int main(int ac, char **av)
 
 		if (strcmp(buffer, "exit") == 0)
 			break;
-		else
 		{
 			command = make_av(buffer);
 			execute(command);
@@ -37,6 +41,11 @@ int main(int ac, char **av)
 
 	return (0);
 }
+/**
+ * execute- fork
+ * @command: array of strings
+ * Return: -1.
+ */
 int execute(char **command)
 {
 	pid_t is_kid;
@@ -46,7 +55,7 @@ int execute(char **command)
 	if (is_kid != 0)
 	{
 		wait(NULL);
-		return(0);
+		return (0);
 	}
 	if (is_kid == 0)
 	{
@@ -61,7 +70,11 @@ int execute(char **command)
 
 	return (0);
 }
-
+/**
+ * make_av - fill the array
+ * @str: string
+ * Return: pointer
+ */
 
 char **make_av(char *str)
 {
@@ -77,7 +90,7 @@ char **make_av(char *str)
 		prev = buffer[i];
 		i++;
 	}
-	
+
 	av = malloc(sizeof(*av) * (numArgs + 2));
 
 	argument = strtok(buffer, " \n");
@@ -95,7 +108,11 @@ char **make_av(char *str)
 
 	return (av);
 }
-
+/**
+ * print_arrary - print array
+ * @array: array
+ * Return: 0.
+ */
 void print_arrary(char **array)
 {
 	int i = 0;
