@@ -21,7 +21,7 @@ int main(int ac, char **av)
 	char **command;
 	size_t bufsize = 0;
 
-	while (1)
+	while (ac)
 	{
 		printf("($) ");
 
